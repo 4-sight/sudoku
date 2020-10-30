@@ -228,35 +228,44 @@ export const GameStateProvider = ({
 
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
-      e.preventDefault()
       if (hotKeys.isDelete(e)) {
+        e.preventDefault()
         deleteValue()
       }
       if (hotKeys.isCenterDelete(e)) {
+        e.preventDefault()
         clearCenterMarks()
       }
       if (hotKeys.isCornerDelete(e)) {
+        e.preventDefault()
         clearCornerMarks()
       }
       if (hotKeys.isAddValue(e)) {
+        e.preventDefault()
         insertValue(hotKeys.getValue(e))
       }
       if (hotKeys.isAddCenterValue(e)) {
+        e.preventDefault()
         toggleCenterMark(hotKeys.getValue(e))
       }
       if (hotKeys.isAddCornerValue(e)) {
+        e.preventDefault()
         toggleCornerMark(hotKeys.getValue(e))
       }
       if (hotKeys.isMultiSelect(e)) {
+        e.preventDefault()
         setMultiSelect(true)
       }
       if (hotKeys.isMove(e)) {
+        e.preventDefault()
         moveCursor(e)
       }
       if (hotKeys.isUndo(e)) {
+        e.preventDefault()
         history.undo()
       }
       if (hotKeys.isRedo(e)) {
+        e.preventDefault()
         history.redo()
       }
     },
