@@ -1,0 +1,37 @@
+//reset
+@import "./resets";
+
+//Pallettes
+@import "./pallettes";
+
+//Overrides
+@import "./overrides/";
+
+//Pages
+@import "./pages";
+
+html,
+body {
+  position: relative;
+  overflow-x: hidden;
+  width: 100vw;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $color-white-1;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+
+  #___gatsby {
+    #gatsby-focus-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+}
+
+main {
+  margin-top: 60px;
+}

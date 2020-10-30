@@ -1,0 +1,11 @@
+$bp-mob-landscape: 480px;
+$bp-tab-portrait: 768px;
+$bp-tab-landscape: 992px;
+$bp-desktop: 1200px;
+
+:export {
+  mobLand: $bp-mob-landscape;
+  tabPort: $bp-tab-portrait;
+  tabLand: $bp-tab-landscape;
+  desktop: $bp-desktop;
+}
