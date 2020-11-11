@@ -8,14 +8,15 @@ import "../../scss/index.scss"
 interface Props {
   children: React.ReactNode
   path?: string
+  title?: string
 }
 
 export default (props: Props) => {
-  const { children, path } = props
+  const { children, title } = props
   return (
     <>
-      <Header />
-      <main>{children}</main>
+      <Header title={title} />
+      <main id="page">{children}</main>
       <Footer />
     </>
   )
