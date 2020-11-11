@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-starter-hello-world",
+  "name": "gatsby-react-sudoku",
   "private": true,
-  "description": "A simplified bare-bones starter for Gatsby",
+  "description": "A set of sudoku puzzles",
   "version": "0.1.0",
   "license": "0BSD",
   "scripts": {
@@ -11,11 +11,20 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "cms": "npx netlify-cms-proxy-server"
   },
   "dependencies": {
+    "@babel/preset-typescript": "^7.12.1",
+    "dotenv": "^8.2.0",
     "gatsby": "^2.24.85",
+    "gatsby-plugin-netlify-cms": "^4.3.17",
+    "gatsby-plugin-typescript": "^2.5.0",
+    "gatsby-source-filesystem": "^2.3.37",
+    "gatsby-transformer-json": "^2.4.15",
     "is-hotkey": "^0.1.6",
+    "is-valid-json": "^1.0.2",
+    "json-to-pretty-yaml": "^1.2.2",
+    "netlify-cms-app": "^2.13.2",
     "node-sass": "^4.14.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
@@ -24,6 +33,7 @@
     "@types/is-hotkey": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
+    "babel-preset-gatsby-package": "^0.5.3",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-react": "^7.21.5",
