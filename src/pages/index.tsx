@@ -10,7 +10,9 @@ export default function index() {
   return (
     <Layout>
       <h1>Home Page</h1>
-      <Link to="/classic">Classic Sudoku</Link>
+      <Link className="link" to="/classic">
+        Classic Sudoku
+      </Link>
     </Layout>
   )
 }
