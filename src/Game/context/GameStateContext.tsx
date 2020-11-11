@@ -5,15 +5,26 @@ import React, {
   createContext,
   useCallback,
 } from "react"
-import { copyCell, hotKeys, checker } from "../utils"
-import { CellData, Cells } from "../types"
-import { useHistory, useSelection } from "../hooks"
+import { copyCell, hotKeys, checker, solver } from "../utils"
+import { CellData, SudokuProps } from "../types"
+import { useHistory, useSelection, useTimer } from "../hooks"
+import { Solution } from "../utils/solver/Classes/Grid"
+
+interface Props extends SudokuProps {
+  children: JSX.Element
+}
+
+type SolveState = "solving" | "solved" | "failed"
 
 interface GameState {
   cells: CellData[]
   selecting: boolean
   selected: Set<number>
   message: string
+  time: string
+  isPaused: boolean
+  isSolved: SolveState
+  solution: null | Solution
 }
 
 interface Actions {
@@ -25,6 +36,10 @@ interface Actions {
   checkCells: () => void
   clearErrors: () => void
   clearMessage: () => void
+  startTimer: () => void
+  stopTimer: () => void
+  pauseTimer: () => void
+  resetTimer: () => void
 }
 
 const defaultState: GameState = {
@@ -32,6 +47,10 @@ const defaultState: GameState = {
   selecting: false,
   selected: new Set(),
   message: "",
+  time: "",
+  isPaused: false,
+  isSolved: "solving",
+  solution: null,
 }
 
 const defaultActions: Actions = {
@@ -43,6 +62,10 @@ const defaultActions: Actions = {
   checkCells: () => {},
   clearErrors: () => {},
   clearMessage: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
+  pauseTimer: () => {},
+  resetTimer: () => {},
 }
 
 const GameStateContext = createContext<GameState>(defaultState)
@@ -50,15 +73,19 @@ const GameActionsContext = createContext<Actions>(defaultActions)
 
 //===================================================================================
 
-export const GameStateProvider = ({
-  children,
-  initialCells,
-}: {
-  children: JSX.Element
-  initialCells: Cells
-}) => {
+export const GameStateProvider = ({ children, givens }: Props) => {
   const [message, setMessage] = useState<string>("")
-  const [currentCells, history] = useHistory(initialCells)
+  const [currentCells, history] = useHistory(JSON.parse(givens))
+  const [solution, setSolution] = useState<Solution | null>(null)
+  const [isSolved, setIsSolved] = useState<SolveState>("solving")
+  const {
+    time,
+    start: startTimer,
+    stop: stopTimer,
+    pause: pauseTimer,
+    reset: resetTimer,
+    paused: isPaused,
+  } = useTimer()
   const {
     selected,
     selecting,
@@ -69,6 +96,29 @@ export const GameStateProvider = ({
     setSelecting,
     setMultiSelect,
   } = useSelection()
+
+  //=================================================
+  // Get Solution
+
+  useEffect(() => {
+    const [solveHistory, solved] = solver(JSON.parse(givens))
+    setSolution(solveHistory)
+    setIsSolved(solved ? "solved" : "failed")
+    const finished = solveHistory.slice(-1)[0]
+
+    const newState = [...currentCells].map((cell, i) => {
+      const { value, possibilities } = finished.cells[i]
+      return {
+        ...copyCell(cell),
+        solution: {
+          value,
+          possibilities,
+        },
+      }
+    })
+
+    history.add(newState)
+  }, [])
 
   //=================================================
   // Actions
@@ -298,6 +348,7 @@ export const GameStateProvider = ({
     const [newState, correct] = checker(currentCells)
     history.add(newState)
     if (correct) {
+      stopTimer()
       setMessage("Bingo!")
     } else {
       setMessage("That doesn't look right!")
@@ -313,6 +364,10 @@ export const GameStateProvider = ({
         selecting,
         selected,
         message,
+        time,
+        isPaused,
+        isSolved,
+        solution,
       }}
     >
       <GameActionsContext.Provider
@@ -325,6 +380,10 @@ export const GameStateProvider = ({
           checkCells,
           clearErrors,
           clearMessage,
+          startTimer,
+          stopTimer,
+          pauseTimer,
+          resetTimer,
         }}
       >
         {children}

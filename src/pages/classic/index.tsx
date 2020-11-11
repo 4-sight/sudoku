@@ -4,14 +4,27 @@ import { graphql, Link, useStaticQuery } from "gatsby"
 // Components
 import Layout from "../../Components/layout"
 
+interface SitePage {
+  path: string
+  context: { title: string; date: string }
+}
+
 export default () => {
-  const { allSitePage } = useStaticQuery(
+  const {
+    allSitePage,
+  }: {
+    allSitePage: {
+      nodes: SitePage[]
+    }
+  } = useStaticQuery(
     graphql`
       query {
         allSitePage(filter: { path: { regex: "/(classic/.)/" } }) {
-          edges {
-            node {
-              path
+          nodes {
+            path
+            context {
+              date
+              title
             }
           }
         }
@@ -21,12 +34,14 @@ export default () => {
 
   return (
     <Layout>
-      <div>Classic Menu</div>
-      {allSitePage.edges.map(
-        ({ node: { path } }: { node: { path: string } }, i: number) => (
-          <Link to={path}>Puzzle {i + 1}</Link>
-        )
-      )}
+      <h1>Classic Menu</h1>
+      {allSitePage.nodes
+        .sort((l1, l2) => Number(l1.context.date) - Number(l2.context.date))
+        .map(({ path, context: { title } }) => (
+          <Link className="link" to={path}>
+            {title}
+          </Link>
+        ))}
     </Layout>
   )
 }

@@ -1,90 +1,66 @@
 import { CellData } from "../types"
 import copyCell from "./copyCell"
 
+const compareCells = (cellA: CellData, cellB: CellData): boolean => {
+  if (cellA.value === cellB.value) {
+    cellA.error = true
+    cellB.error = true
+    return true
+  }
+  return false
+}
+
 export default (cells: CellData[]): [CellData[], boolean] => {
-  // Make immutable
-  const _cells = [...cells].map(cell => copyCell(cell))
+  // Make immutable and clear errors
+  const _cells = [...cells].map(cell => {
+    const copy = copyCell(cell)
+    copy.error = false
+    return copy
+  })
   let isCorrect = true
 
-  // Duplicates/ null in row
-  const rows: CellData[][] = [[], [], [], [], [], [], [], [], []]
-  _cells.forEach((cell, i) => {
-    rows[Math.floor(i / 9)].push(cell)
-  })
+  _cells.map(cell => {
+    const { index, value } = cell
 
-  rows.forEach(row => {
-    row.forEach((cell, index) => {
-      if (!cell.error) {
-        if (!cell.value) {
-          cell.error = true
-          isCorrect = false
-        } else {
-          for (let i = index + 1; i < 9; i++) {
-            if (cell.value === row[i].value) {
-              cell.error = true
-              row[i].error = true
-              isCorrect = false
-            }
-          }
-        }
-      } else {
+    // Check for value
+    if (!value) {
+      cell.error = true
+      isCorrect = false
+      return cell
+    }
+
+    // Check against rest of row ====================================
+    const rowEnd = Math.ceil((index + 1) / 9) * 9 - 1
+    const rowInc = 1
+
+    for (let i = index + rowInc; i <= rowEnd; i += rowInc) {
+      if (compareCells(cell, _cells[i])) {
         isCorrect = false
       }
-    })
-  })
+    }
 
-  // Duplicates/ null in col
-  const cols: CellData[][] = [[], [], [], [], [], [], [], [], []]
-  _cells.forEach((cell, i) => {
-    cols[i % 9].push(cell)
-  })
+    // Check against rest of column ===================================
+    const colEnd = 72 + (index % 9)
+    const colInc = 9
 
-  cols.forEach(col => {
-    col.forEach((cell, index) => {
-      if (!cell.error) {
-        if (!cell.value) {
-          cell.error = true
-          isCorrect = false
-        } else {
-          for (let i = index + 1; i < 9; i++) {
-            if (cell.value === col[i].value) {
-              cell.error = true
-              col[i].error = true
-              isCorrect = false
-            }
-          }
-        }
-      } else {
+    for (let i = index + colInc; i <= colEnd; i += colInc) {
+      if (compareCells(cell, _cells[i])) {
         isCorrect = false
       }
-    })
-  })
+    }
 
-  // Duplicates/ null in box
-  const boxes: CellData[][] = [[], [], [], [], [], [], [], [], []]
-  _cells.forEach((cell, i) => {
-    boxes[(Math.floor(i / 3) % 3) + Math.floor(i / 27) * 3].push(cell)
-  })
+    //Check against rest of box =======================================
+    const boxEnd =
+      Math.ceil((index + 1) / 27) * 27 - 9 + Math.floor((index % 9) / 3) * 3 + 2
+    const boxInc = (i: number) => ((i + 1) % 3 > 0 ? i + 1 : i + 7)
 
-  boxes.forEach(box => {
-    box.forEach((cell, index) => {
-      if (!cell.error) {
-        if (!cell.value) {
-          cell.error = true
-          isCorrect = false
-        } else {
-          for (let i = index + 1; i < 9; i++) {
-            if (cell.value === box[i].value) {
-              cell.error = true
-              box[i].error = true
-              isCorrect = false
-            }
-          }
-        }
-      } else {
+    for (let i = boxInc(index); i <= boxEnd; i = boxInc(i)) {
+      if (compareCells(cell, _cells[i])) {
         isCorrect = false
       }
-    })
+    }
+
+    return cell
   })
 
   return [_cells, isCorrect]

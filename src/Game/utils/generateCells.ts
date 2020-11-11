@@ -1,33 +1,29 @@
-import { Cells, CellData } from "../types"
+import { Givens, CellData } from "../types"
 
-const getCell = (
-  row: number,
-  col: number,
-  value: number | null = null
-): CellData => ({
+const getCell = (index: number, value: number | null = null): CellData => ({
   value,
   fixed: !!value,
-  row: row + 1,
-  col: col + 1,
-  index: row * 9 + col,
+  row: Math.floor(index / 9) + 1,
+  col: (index % 9) + 1,
+  index: index,
   backgroundColor: "",
   corner: new Set(),
   center: new Set(),
   error: false,
+  solution: null,
 })
 
-export default (starter: Cells): CellData[] => {
+export default (givens: Givens): CellData[] => {
   const cells: CellData[] = []
 
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      cells.push(getCell(i, j))
+      cells.push(getCell(i * 9 + j))
     }
   }
 
-  starter.forEach(({ row, col, value }) => {
-    const index = (row - 1) * 9 + (col - 1)
-    cells.splice(index, 1, getCell(row - 1, col - 1, value))
+  givens.forEach(({ index, value }) => {
+    cells.splice(index, 1, getCell(index, value))
   })
 
   return cells
