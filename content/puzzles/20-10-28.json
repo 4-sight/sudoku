@@ -1,0 +1,6 @@
+{
+  "variant": "classic",
+  "date": "20-10-28",
+  "title": "This Sudoku Actually Teaches The X-Wing Technique",
+  "givens": "[{\"index\":0,\"value\":1},{\"index\":3,\"value\":2},{\"index\":6,\"value\":3},{\"index\":9,\"value\":3},{\"index\":12,\"value\":4},{\"index\":15,\"value\":5},{\"index\":20,\"value\":6},{\"index\":23,\"value\":7},{\"index\":26,\"value\":2},{\"index\":29,\"value\":7},{\"index\":32,\"value\":2},{\"index\":35,\"value\":5},{\"index\":45,\"value\":5},{\"index\":48,\"value\":3},{\"index\":51,\"value\":1},{\"index\":54,\"value\":8},{\"index\":57,\"value\":1},{\"index\":60,\"value\":2},{\"index\":65,\"value\":2},{\"index\":68,\"value\":3},{\"index\":71,\"value\":1},{\"index\":74,\"value\":5},{\"index\":77,\"value\":8},{\"index\":80,\"value\":6}]"
+}

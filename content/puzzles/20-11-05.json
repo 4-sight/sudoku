@@ -1,0 +1,6 @@
+{
+  "variant": "classic",
+  "date": "20-11-05",
+  "title": "Easy test",
+  "givens": "[{\"index\":0,\"value\":2},{\"index\":4,\"value\":7},{\"index\":7,\"value\":3},{\"index\":8,\"value\":8},{\"index\":14,\"value\":6},{\"index\":16,\"value\":7},{\"index\":18,\"value\":3},{\"index\":22,\"value\":4},{\"index\":24,\"value\":6},{\"index\":29,\"value\":8},{\"index\":31,\"value\":2},{\"index\":33,\"value\":7},{\"index\":36,\"value\":1},{\"index\":44,\"value\":6},{\"index\":47,\"value\":7},{\"index\":49,\"value\":3},{\"index\":51,\"value\":4},{\"index\":56,\"value\":4},{\"index\":58,\"value\":8},{\"index\":62,\"value\":9},{\"index\":64,\"value\":6},{\"index\":72,\"value\":9},{\"index\":73,\"value\":1},{\"index\":66,\"value\":4},{\"index\":76,\"value\":6},{\"index\":80,\"value\":2}]"
+}

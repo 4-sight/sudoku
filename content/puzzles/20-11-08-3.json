@@ -1,0 +1,6 @@
+{
+  "variant": "classic",
+  "date": "20-11-08",
+  "title": "(Tester) Naked triples 2",
+  "givens": "[{\"index\":0,\"value\":2},{\"index\":9,\"value\":6},{\"index\":18,\"value\":3},{\"index\":12,\"value\":8},{\"index\":21,\"value\":6},{\"index\":4,\"value\":1},{\"index\":23,\"value\":7},{\"index\":17,\"value\":9},{\"index\":25,\"value\":5},{\"index\":26,\"value\":4},{\"index\":37,\"value\":4},{\"index\":31,\"value\":5},{\"index\":32,\"value\":6},{\"index\":40,\"value\":8},{\"index\":48,\"value\":4},{\"index\":49,\"value\":7},{\"index\":43,\"value\":6},{\"index\":54,\"value\":7},{\"index\":55,\"value\":3},{\"index\":63,\"value\":9},{\"index\":57,\"value\":1},{\"index\":59,\"value\":4},{\"index\":68,\"value\":5},{\"index\":76,\"value\":2},{\"index\":62,\"value\":5},{\"index\":71,\"value\":1},{\"index\":80,\"value\":7}]"
+}

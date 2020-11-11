@@ -1,0 +1,6 @@
+{
+  "variant": "classic",
+  "date": "20-11-08",
+  "title": "(Tester) Naked pairs 2",
+  "givens": "[{\"index\":1,\"value\":8},{\"index\":10,\"value\":3},{\"index\":20,\"value\":2},{\"index\":4,\"value\":9},{\"index\":22,\"value\":6},{\"index\":24,\"value\":1},{\"index\":7,\"value\":3},{\"index\":26,\"value\":8},{\"index\":28,\"value\":2},{\"index\":36,\"value\":8},{\"index\":47,\"value\":4},{\"index\":30,\"value\":8},{\"index\":39,\"value\":9},{\"index\":41,\"value\":7},{\"index\":50,\"value\":5},{\"index\":33,\"value\":5},{\"index\":44,\"value\":6},{\"index\":52,\"value\":7},{\"index\":54,\"value\":5},{\"index\":56,\"value\":3},{\"index\":58,\"value\":4},{\"index\":76,\"value\":5},{\"index\":60,\"value\":9},{\"index\":70,\"value\":1},{\"index\":79,\"value\":2},{\"index\":73,\"value\":1}]"
+}
