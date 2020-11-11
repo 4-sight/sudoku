@@ -1,31 +1,17 @@
-#game {
-  width: 100vw;
+#page {
   display: flex;
   flex-direction: column;
-  place-content: center;
-  place-items: center;
-  position: relative;
+  align-items: center;
 
-  .click-off {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-
-  button {
-    margin: 0.5rem;
-    padding: 0.5rem;
+  .link {
+    border-bottom: 2px solid $color-black-2;
+    padding: 0.3rem;
     font-size: 1.2rem;
-    background-color: rgb(64, 162, 237);
-    border-radius: 2rem;
-    color: white;
-    cursor: pointer;
-    z-index: 3;
+    color: $color-black-2;
 
-    &:focus {
-      outline: none;
+    &:hover {
+      color: $color-black-1;
+      border-bottom: 2px solid $color-black-1;
     }
   }
 }

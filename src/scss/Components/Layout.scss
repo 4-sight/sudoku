@@ -1,0 +1,8 @@
+#header,
+#footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $color-header;
+  color: $color-white-1;
+}
