@@ -1,5 +1,5 @@
 import { useReducer, useState } from "react"
-import { CellData, Cells } from "../types"
+import { CellData, Givens } from "../types"
 import { generateCells, copyCell } from "../utils"
 
 type HistoryActions = {
@@ -22,7 +22,7 @@ const historyReducer: HistoryReducer = (history, { nextState, offset }) => {
   )
 }
 
-export default (initialGrid: Cells = []): History => {
+export default (initialGrid: Givens = []): History => {
   const [history, push] = useReducer<HistoryReducer>(historyReducer, [
     generateCells(initialGrid),
   ])
