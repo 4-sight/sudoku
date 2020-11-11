@@ -1,9 +1,13 @@
 import React from "react"
 
-export default () => {
+interface Props {
+  title?: string
+}
+
+export default ({ title }: Props) => {
   return (
-    <div>
-      <h1>Header</h1>
+    <div id="header">
+      <h1>{title ? title : "Header"}</h1>
     </div>
   )
 }
