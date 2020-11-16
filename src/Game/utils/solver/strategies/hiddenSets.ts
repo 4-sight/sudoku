@@ -13,20 +13,22 @@ export const findDoubles = (
   unmatched: [Positions, number][],
   matched: HiddenSet[] = []
 ): [[Positions, number][], HiddenSet[]] => {
-  unmatched.forEach(([set1, num1], i) => {
-    for (let j = i + 1; j < unmatched.length; j++) {
-      const [set2, num2] = unmatched[j]
+  const _unmatched = [...unmatched]
+
+  _unmatched.forEach(([set1, num1], i) => {
+    for (let j = i + 1; j < _unmatched.length; j++) {
+      const [set2, num2] = _unmatched[j]
 
       if (set1.matches(set2)) {
         matched.push({ values: [num1, num2], cells: set1.toArray() })
-        unmatched.splice(j, 1)
-        unmatched.splice(i, 1)
-        return findDoubles(unmatched, matched)
+        _unmatched.splice(j, 1)
+        _unmatched.splice(i, 1)
+        return findDoubles(_unmatched, matched)
       }
     }
   })
 
-  return [unmatched, matched]
+  return [_unmatched, matched]
 }
 
 //=========================================
