@@ -113,9 +113,9 @@ export default class GridCell {
         )
       } else {
         if (updated) {
-          this.row.search(triggers)
-          this.col.search(triggers)
-          this.box.search(triggers)
+          this.row.search([this.index])
+          this.col.search([this.index])
+          this.box.search([this.index])
         }
       }
     }
@@ -129,9 +129,9 @@ export default class GridCell {
     this.possibilities = new Set(values)
 
     this.recordStep(strategy, "Set possibilities", values, triggers)
-    this.row.search(triggers)
-    this.col.search(triggers)
-    this.box.search(triggers)
+    this.row.search([this.index])
+    this.col.search([this.index])
+    this.box.search([this.index])
   }
 
   getPossibilities = () => {
