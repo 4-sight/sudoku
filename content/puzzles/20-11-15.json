@@ -1,0 +1,6 @@
+{
+  "variant": "classic",
+  "date": "20-11-15",
+  "title": "The Simple Trick For Hard Sudokus",
+  "givens": "[{\"index\":0,\"value\":1},{\"index\":10,\"value\":2},{\"index\":20,\"value\":3},{\"index\":12,\"value\":4},{\"index\":4,\"value\":8},{\"index\":24,\"value\":5},{\"index\":16,\"value\":7},{\"index\":8,\"value\":6},{\"index\":29,\"value\":4},{\"index\":36,\"value\":5},{\"index\":46,\"value\":6},{\"index\":48,\"value\":2},{\"index\":40,\"value\":3},{\"index\":32,\"value\":7},{\"index\":34,\"value\":1},{\"index\":51,\"value\":9},{\"index\":44,\"value\":8},{\"index\":56,\"value\":7},{\"index\":64,\"value\":8},{\"index\":72,\"value\":9},{\"index\":76,\"value\":6},{\"index\":68,\"value\":9},{\"index\":60,\"value\":2},{\"index\":70,\"value\":3},{\"index\":80,\"value\":4}]"
+}
