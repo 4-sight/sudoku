@@ -57,7 +57,7 @@ const Game = () => {
               <br />
               {solution[solutionStepIndex].actionValues && (
                 <>
-                  Values: {solution[solutionStepIndex].actionValues}
+                  Values: {solution[solutionStepIndex].actionValues?.join(",")}
                   <br />
                 </>
               )}
