@@ -95,9 +95,9 @@ export default class GridCell {
     p: number[],
     strategy: Strategy,
     triggers: number[]
-  ) => {
+  ): boolean => {
+    let updated = false
     if (!this.value) {
-      let updated = false
       p.forEach(n => {
         if (this.possibilities.delete(n)) {
           this.recordStep(strategy, "Remove possibility", p, triggers)
@@ -119,6 +119,8 @@ export default class GridCell {
         }
       }
     }
+
+    return updated
   }
 
   replacePossibilities = (

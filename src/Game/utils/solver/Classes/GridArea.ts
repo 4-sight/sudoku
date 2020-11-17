@@ -57,14 +57,21 @@ export default class GridArea {
   removeFromAllExcept = (
     exceptions: GridCell[],
     values: number[],
-    strategy: Strategy
-  ) => {
-    const triggers = exceptions.map(cell => cell.index)
+    strategy: Strategy,
+    additionalTriggers: number[] = []
+  ): boolean => {
+    let updated = false
+    const triggers = [
+      ...exceptions.map(cell => cell.index),
+      ...additionalTriggers,
+    ]
     this.cells.forEach(cell => {
       if (!cell.getValue() && !exceptions.includes(cell)) {
-        cell.removePossibilities(values, strategy, triggers)
+        updated = cell.removePossibilities(values, strategy, triggers)
       }
     })
+
+    return updated
   }
 
   findHidden = (triggers: number[]) => {
@@ -158,7 +165,8 @@ export default class GridArea {
           this.pointing(cells, value)
         })
       }
-    } else if (posMatches.length) {
+    } else if (posMatches.length && [2, 3].includes(setLength)) {
+      // handle pointing pairs/triples box line
       posMatches.forEach(([positions, value]) => {
         this.pointing(positions, value)
       })
@@ -213,8 +221,6 @@ export default class GridArea {
       }
     }
   }
-
-  xWing = () => {}
 
   search = (triggers: number[]) => {
     this.findHidden(triggers)

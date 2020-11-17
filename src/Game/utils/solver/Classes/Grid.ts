@@ -1,6 +1,7 @@
 import { Givens } from "../../../types"
 import GridAreaGroup from "./GridAreaGroup"
 import GridCell from "./GridCell"
+import { xWing } from "../strategies"
 
 export type Strategy =
   | "givens"
@@ -99,7 +100,19 @@ export default class Grid {
   }
 
   solve = () => {
+    // Search by cell
     this.cells.forEach(cell => cell.updateLinked())
+
+    if (this.unsolved.size) {
+      this.advancedSolve()
+    }
+  }
+
+  advancedSolve = () => {
+    // Search grid for x-wings
+    if (xWing(this)) {
+      this.unsolved.size && this.advancedSolve()
+    }
   }
 
   getHistory = (): Solution =>
