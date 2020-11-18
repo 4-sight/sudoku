@@ -5,6 +5,20 @@ import { Strategy } from "./Grid"
 import { HiddenSet } from "../strategies/hiddenSets"
 
 export type Area = "row" | "col" | "box"
+type GetNPositionsExclusions = {
+  sameRowAll?: true
+  sameColAll?: true
+  sameBoxAll?: true
+  sameRowAny?: true
+  sameColAny?: true
+  sameBoxAny?: true
+  diffRowAll?: true
+  diffColAll?: true
+  diffBoxAll?: true
+  diffRowAny?: true
+  diffColAny?: true
+  diffBoxAny?: true
+}
 
 export default class GridArea {
   cells: GridCell[]
@@ -25,6 +39,10 @@ export default class GridArea {
   addCell = (cell: GridCell) => {
     this.cells.push(cell)
   }
+
+  getIndex = (cell: GridCell): number => this.cells.indexOf(cell)
+
+  getCell = (index: number): GridCell => this.cells[index]
 
   addPos = (n: number, cell: GridCell) => {
     this.pos.get(n)?.add(cell)
@@ -72,6 +90,82 @@ export default class GridArea {
     })
 
     return updated
+  }
+
+  getNPositions = (
+    n: number,
+    exclusions?: GetNPositionsExclusions
+  ): [GridCell[], number][] => {
+    const results: [GridCell[], number][] = []
+
+    this.pos.forEach((positions, value) => {
+      if (positions.size === n) {
+        let exclude = false
+        const cells = positions.toArray()
+
+        if (n > 1 && exclusions) {
+          const boxes = new Set(cells.map(cell => cell.box)).size
+          const rows = new Set(cells.map(cell => cell.row)).size
+          const cols = new Set(cells.map(cell => cell.col)).size
+
+          // Same exclusions
+          if (exclusions.sameBoxAll && boxes === 1) {
+            exclude = false
+          }
+
+          if (exclusions.sameRowAll && rows === 1) {
+            exclude = false
+          }
+
+          if (exclusions.sameColAll && cols === 1) {
+            exclude = false
+          }
+
+          if (exclusions.sameBoxAny && boxes < n) {
+            exclude = false
+          }
+
+          if (exclusions.sameRowAny && rows < n) {
+            exclude = false
+          }
+
+          if (exclusions.sameColAny && cols < n) {
+            exclude = false
+          }
+
+          // Diff exclusions
+          if (exclusions.diffBoxAll && boxes === n) {
+            exclude = false
+          }
+
+          if (exclusions.diffRowAll && rows === n) {
+            exclude = false
+          }
+
+          if (exclusions.diffColAll && cols === n) {
+            exclude = false
+          }
+
+          if (exclusions.diffBoxAny && boxes !== 1) {
+            exclude = false
+          }
+
+          if (exclusions.diffRowAny && rows !== 1) {
+            exclude = false
+          }
+
+          if (exclusions.diffColAny && cols !== 1) {
+            exclude = false
+          }
+        }
+
+        if (!exclude) {
+          results.push([cells, value])
+        }
+      }
+    })
+
+    return results
   }
 
   findHidden = (triggers: number[]) => {
