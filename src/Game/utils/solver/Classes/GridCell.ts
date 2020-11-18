@@ -59,6 +59,22 @@ export default class GridCell {
 
   getValue = () => this.value
 
+  getAreas = (filters?: GridArea[]): GridArea[] => {
+    return [this.row, this.col, this.box].filter(
+      area => !filters?.includes(area)
+    )
+  }
+
+  matchAreas = (cell: GridCell): GridArea[] => {
+    const areas: GridArea[] = []
+
+    this.row === cell.row && areas.push(this.row)
+    this.col === cell.col && areas.push(this.col)
+    this.box === cell.box && areas.push(this.box)
+
+    return areas
+  }
+
   setValue = (v: number, strategy: Strategy, triggers: number[]) => {
     this.value = v
     this.removeFromUnsolved()
@@ -138,5 +154,36 @@ export default class GridCell {
 
   getPossibilities = () => {
     return Array.from(this.possibilities.values())
+  }
+
+  comparePossibilities = (
+    otherCell: GridCell
+  ): { common: number[]; uncommon: number[] } => {
+    const common = new Set<number>()
+    const uncommon = new Set<number>()
+
+    ;[...this.getPossibilities(), ...otherCell.getPossibilities()].forEach(
+      value => {
+        if (!uncommon.has(value) && !common.has(value)) {
+          uncommon.add(value)
+        } else {
+          uncommon.delete(value)
+          common.add(value)
+        }
+      }
+    )
+
+    return {
+      common: Array.from(common),
+      uncommon: Array.from(uncommon),
+    }
+  }
+
+  matchPossibilities = (values: number[]): boolean => {
+    if (values.length !== this.possibilities.size) {
+      return false
+    }
+
+    return !values.some(val => !this.possibilities.has(val))
   }
 }

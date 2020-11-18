@@ -1,7 +1,7 @@
 import { Givens } from "../../../types"
 import GridAreaGroup from "./GridAreaGroup"
 import GridCell from "./GridCell"
-import { xWing } from "../strategies"
+import { xWing, yWing } from "../strategies"
 
 export type Strategy =
   | "givens"
@@ -109,10 +109,15 @@ export default class Grid {
   }
 
   advancedSolve = () => {
-    // Search grid for x-wings
-    if (xWing(this)) {
-      this.unsolved.size && this.advancedSolve()
-    }
+    const strategies: ((grid: Grid) => boolean)[] = [xWing, yWing]
+
+    // Call each strategy
+    strategies.some(strategy => {
+      // if strategy has updated grid and unsolved cells remain then recurse
+      if (strategy(this) && this.unsolved.size) {
+        this.advancedSolve()
+      }
+    })
   }
 
   getHistory = (): Solution =>
