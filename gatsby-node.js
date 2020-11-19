@@ -6,8 +6,8 @@ const { puzzlesData } = require("./pageDataHandlers")
 const SudokuTemplate = path.resolve(__dirname, "src/templates/Sudoku.tsx")
 const { config } = require("./static/admin")
 
-exports.onPreBootstrap = () => {
-  generateNetlifyConfig(config)
+exports.onPreBootstrap = async () => {
+  await generateNetlifyConfig(config)
 }
 
 exports.createPages = async ({
