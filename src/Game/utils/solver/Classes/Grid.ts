@@ -1,7 +1,7 @@
 import { Givens } from "../../../types"
 import GridAreaGroup from "./GridAreaGroup"
 import GridCell from "./GridCell"
-import { xWing, yWing } from "../strategies"
+import { xWing, yWing, fish } from "../strategies"
 
 export type Strategy =
   | "givens"
@@ -20,6 +20,7 @@ export type Strategy =
   | "skyscraper"
   | "y-wing"
   | "swordfish"
+  | "jellyfish"
 
 export type Action =
   | "Set Value"
@@ -109,7 +110,7 @@ export default class Grid {
   }
 
   advancedSolve = () => {
-    const strategies: ((grid: Grid) => boolean)[] = [xWing, yWing]
+    const strategies: ((grid: Grid) => boolean)[] = [xWing, yWing, fish]
 
     // Call each strategy
     strategies.some(strategy => {
