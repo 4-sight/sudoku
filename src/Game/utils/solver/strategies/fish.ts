@@ -75,12 +75,13 @@ export default (grid: Grid): boolean => {
                     )
                     const triggers = swordFishCells.map(cell => cell.index)
 
-                    updated = area.removeFromAllExcept(
-                      exceptions,
-                      [v],
-                      "swordfish",
-                      triggers
-                    )
+                    updated =
+                      area.removeFromAllExcept(
+                        exceptions,
+                        [v],
+                        "swordfish",
+                        triggers
+                      ) || updated === true
                   })
                   return true
                 }
@@ -118,12 +119,13 @@ export default (grid: Grid): boolean => {
                         )
                         const triggers = jellyFishCells.map(cell => cell.index)
 
-                        updated = area.removeFromAllExcept(
-                          exceptions,
-                          [v],
-                          "jellyfish",
-                          triggers
-                        )
+                        updated =
+                          area.removeFromAllExcept(
+                            exceptions,
+                            [v],
+                            "jellyfish",
+                            triggers
+                          ) || updated === true
                       })
                       return true
                     }
