@@ -2,7 +2,6 @@ import GridCell from "./GridCell"
 import Positions from "./Positions"
 import { hidden } from "../strategies"
 import { Strategy } from "./Grid"
-import { HiddenSet } from "../strategies/hiddenSets"
 
 export type Area = "row" | "col" | "box"
 type GetNPositionsExclusions = {
@@ -85,7 +84,8 @@ export default class GridArea {
     ]
     this.cells.forEach(cell => {
       if (!cell.getValue() && !exceptions.includes(cell)) {
-        updated = cell.removePossibilities(values, strategy, triggers)
+        updated =
+          cell.removePossibilities(values, strategy, triggers) || updated
       }
     })
 
@@ -168,7 +168,9 @@ export default class GridArea {
     return results
   }
 
-  findHidden = (triggers: number[]) => {
+  gradePositionsBySize = (
+    triggers: number[]
+  ): [[Positions, number][], [Positions, number][], [Positions, number][]] => {
     const posDoubles: [Positions, number][] = []
     const posTriples: [Positions, number][] = []
     const posQuads: [Positions, number][] = []
@@ -201,70 +203,7 @@ export default class GridArea {
       }
     })
 
-    posDoubles.length && this.handleHidden(posDoubles)
-    posTriples.length && this.handleHidden(posTriples)
-    posQuads.length && this.handleHidden(posQuads)
-  }
-
-  handleHidden = (posMatches: [Positions, number][]) => {
-    let strategy: Strategy = "elimination"
-    const setLength = posMatches[0][0].size
-    let matched: HiddenSet[] = []
-    let unmatched: [Positions, number][] = []
-
-    switch (setLength) {
-      case 2:
-        strategy = "hidden pair"
-        const [_unmatchedDoubles, _matchedDoubles] = hidden.findDoubles(
-          posMatches
-        )
-        matched = _matchedDoubles
-        unmatched = _unmatchedDoubles
-        break
-
-      case 3:
-        strategy = "hidden triple"
-        const [_unmatchedTriples, _matchedTriples] = hidden.findTriples(
-          posMatches
-        )
-        matched = _matchedTriples
-        unmatched = _unmatchedTriples
-        break
-
-      case 4:
-        strategy = "hidden quad"
-        const [_unmatchedQuads, _matchedQuads] = hidden.findQuads(posMatches)
-        matched = _matchedQuads
-        unmatched = _unmatchedQuads
-        break
-    }
-
-    if (posMatches.length >= setLength) {
-      matched.forEach(({ values, cells }) => {
-        cells.forEach(cell => {
-          if (cell.getPossibilities().length > setLength)
-            cell.replacePossibilities(
-              values,
-              strategy,
-              cells.map(cell => cell.index)
-            )
-        })
-
-        this.removeFromAllExcept(cells, values, strategy)
-      })
-
-      //pointing pairs / box line reductions
-      if ([2, 3].includes(setLength)) {
-        unmatched.forEach(([cells, value]) => {
-          this.pointing(cells, value)
-        })
-      }
-    } else if (posMatches.length && [2, 3].includes(setLength)) {
-      // handle pointing pairs/triples box line
-      posMatches.forEach(([positions, value]) => {
-        this.pointing(positions, value)
-      })
-    }
+    return [posDoubles, posTriples, posQuads]
   }
 
   matchAreas = (cells: GridCell[]) => {
@@ -317,6 +256,12 @@ export default class GridArea {
   }
 
   search = (triggers: number[]) => {
-    this.findHidden(triggers)
+    const [doubles, triples, quads] = this.gradePositionsBySize(triggers)
+
+    hidden(doubles, triples, quads)
+
+    // Pointing pairs/ box line reduction
+    doubles.forEach(([positions, val]) => this.pointing(positions, val))
+    triples.forEach(([positions, val]) => this.pointing(positions, val))
   }
 }

@@ -1,110 +1,130 @@
-import GridCell from "../Classes/GridCell"
 import Positions from "../Classes/Positions"
 
-export type HiddenSet = {
-  values: number[]
-  cells: GridCell[]
-}
+const hidden = (
+  positions: [Positions, number][],
+  triples: [Positions, number][],
+  quads: [Positions, number][],
+  target: 2 | 3 | 4 = 2
+) => {
+  for (let i = 0; i < positions.length - (target - 1); i++) {
+    const [set1, num1] = positions[i]
 
-//===================
-//===================
+    for (let j = i + 1; j < positions.length - (target - 2); j++) {
+      const [set2, num2] = positions[j]
 
-export const findDoubles = (
-  unmatched: [Positions, number][],
-  matched: HiddenSet[] = []
-): [[Positions, number][], HiddenSet[]] => {
-  const _unmatched = [...unmatched]
-
-  _unmatched.forEach(([set1, num1], i) => {
-    for (let j = i + 1; j < _unmatched.length; j++) {
-      const [set2, num2] = _unmatched[j]
-
-      if (set1.matches(set2)) {
-        matched.push({ values: [num1, num2], cells: set1.toArray() })
-        _unmatched.splice(j, 1)
-        _unmatched.splice(i, 1)
-        return findDoubles(_unmatched, matched)
-      }
-    }
-  })
-
-  return [_unmatched, matched]
-}
-
-//=========================================
-
-export const findTriples = (
-  unmatched: [Positions, number][],
-  matched: HiddenSet[] = []
-): [[Positions, number][], HiddenSet[]] => {
-  const _unmatched = [...unmatched]
-
-  _unmatched.forEach(([set1, num1], i) => {
-    for (let j = i + 1; j < _unmatched.length - 1; j++) {
-      const [set2, num2] = _unmatched[j]
-
-      if (!set1.matches(set2)) {
-        break
-      }
-
-      for (let k = i + 2; k < _unmatched.length; k++) {
-        const [set3, num3] = _unmatched[k]
-
-        if (set1.matches(set3)) {
-          matched.push({ values: [num1, num2, num3], cells: set1.toArray() })
-          _unmatched.splice(k, 1)
-          _unmatched.splice(j, 1)
-          _unmatched.splice(i, 1)
-          return findDoubles(_unmatched, matched)
+      if (target === 2) {
+        // Hidden pair
+        if (set1.matches(set2)) {
+          const triggers = set1.toArray().map(cell => cell.index)
+          let updated = false
+          set1.forEach(cell => {
+            if (cell.getPossibilities().length > 2) {
+              if (cell.removeAllExcept([num1, num2], "hidden pair", triggers)) {
+                updated = true
+              }
+            }
+          })
+          if (updated) {
+            // Remove matched positions, recurse
+            positions.splice(j, 1)
+            positions.splice(i, 1)
+            hidden(positions, triples, quads, 2)
+            return
+          }
         }
-      }
-    }
-  })
+      } else {
+        for (let k = j + 1; k < positions.length - (target - 3); k++) {
+          const [set3, num3] = positions[k]
 
-  return [_unmatched, matched]
-}
+          if (target === 3) {
+            const uniquePositions = new Set([
+              ...set1.toArray(),
+              ...set2.toArray(),
+              ...set3.toArray(),
+            ])
 
-//=========================================
+            // Hidden triple
+            if (uniquePositions.size === 3) {
+              let updated = false
+              const triggers = Array.from(uniquePositions).map(
+                cell => cell.index
+              )
+              uniquePositions.forEach(cell => {
+                if (
+                  cell.removeAllExcept(
+                    [num1, num2, num3],
+                    "hidden triple",
+                    triggers
+                  )
+                ) {
+                  updated = true
+                }
+              })
 
-export const findQuads = (
-  unmatched: [Positions, number][],
-  matched: HiddenSet[] = []
-): [[Positions, number][], HiddenSet[]] => {
-  const _unmatched = [...unmatched]
+              if (updated) {
+                // Remove matched positions, recurse
+                positions.splice(k, 1)
+                positions.splice(j, 1)
+                positions.splice(i, 1)
+                hidden(positions, triples, quads, 3)
+                return
+              }
+            }
+          } else {
+            for (let l = k + 1; l < positions.length; l++) {
+              const [set4, num4] = positions[l]
 
-  _unmatched.forEach(([set1, num1], i) => {
-    for (let j = i + 1; j < _unmatched.length - 2; j++) {
-      const [set2, num2] = _unmatched[j]
+              const uniquePositions = new Set([
+                ...set1.toArray(),
+                ...set2.toArray(),
+                ...set3.toArray(),
+                ...set4.toArray(),
+              ])
 
-      if (!set1.matches(set2)) {
-        break
-      }
+              // Hidden Quad
+              if (uniquePositions.size === 4) {
+                let updated = false
+                const triggers = Array.from(uniquePositions).map(
+                  cell => cell.index
+                )
+                uniquePositions.forEach(cell => {
+                  if (
+                    cell.removeAllExcept(
+                      [num1, num2, num3, num4],
+                      "hidden quad",
+                      triggers
+                    )
+                  ) {
+                    updated = true
+                  }
+                })
 
-      for (let k = i + 2; k < _unmatched.length - 1; k++) {
-        const [set3, num3] = _unmatched[k]
-
-        if (!set1.matches(set3)) {
-          break
-        }
-
-        for (let l = i + 3; l < _unmatched.length; l++) {
-          const [set4, num4] = _unmatched[l]
-
-          if (set1.matches(set4)) {
-            matched.push({
-              values: [num1, num2, num3, num4],
-              cells: set1.toArray(),
-            })
-            _unmatched.splice(l, 1)
-            _unmatched.splice(k, 1)
-            _unmatched.splice(j, 1)
-            _unmatched.splice(i, 1)
-            return findDoubles(_unmatched, matched)
+                if (updated) {
+                  // Remove matched positions, recurse
+                  positions.splice(l, 1)
+                  positions.splice(k, 1)
+                  positions.splice(j, 1)
+                  positions.splice(i, 1)
+                  hidden(positions, triples, quads, 4)
+                  return
+                }
+              }
+            }
           }
         }
       }
     }
-  })
+  }
 
-  return [_unmatched, matched]
+  switch (target) {
+    case 2:
+      hidden([...positions, ...triples], [], quads, 3)
+      return
+
+    case 3:
+      hidden([...positions, ...quads], [], [], 4)
+      return
+  }
 }
+
+export default hidden
