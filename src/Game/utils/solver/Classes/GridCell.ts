@@ -139,17 +139,25 @@ export default class GridCell {
     return updated
   }
 
-  replacePossibilities = (
+  removeAllExcept = (
     values: number[],
     strategy: Strategy,
     triggers: number[]
-  ) => {
-    this.possibilities = new Set(values)
+  ): boolean => {
+    const remaining = [...values].filter(n => this.possibilities.has(n))
 
-    this.recordStep(strategy, "Set possibilities", values, triggers)
-    this.row.search([this.index])
-    this.col.search([this.index])
-    this.box.search([this.index])
+    if (remaining.length < this.possibilities.size) {
+      this.possibilities = new Set(remaining)
+
+      this.recordStep(strategy, "Set possibilities", values, triggers)
+      this.row.search([this.index])
+      this.col.search([this.index])
+      this.box.search([this.index])
+
+      return true
+    }
+
+    return false
   }
 
   getPossibilities = () => {
