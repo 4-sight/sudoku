@@ -8,6 +8,7 @@ export default class GridCell {
   row: GridArea
   col: GridArea
   box: GridArea
+  checking: boolean
   removeFromUnsolved: () => void
   recordStep: (
     strategy: Strategy,
@@ -16,8 +17,9 @@ export default class GridCell {
     triggers: number[]
   ) => void
 
-  constructor(i: number, grid: Grid) {
+  constructor(i: number, grid: Grid, checking: boolean = false) {
     this.value = null
+    this.checking = checking
     this.index = i
     this.possibilities = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9])
     this.row = grid.rows.get(Math.floor(i / 9))
@@ -77,6 +79,12 @@ export default class GridCell {
 
   setValue = (v: number, strategy: Strategy, triggers: number[]) => {
     this.value = v
+
+    // Stop solve on error
+    if (this.checking && !this.isValid()) {
+      throw new Error(`Invalid value found`)
+    }
+
     this.removeFromUnsolved()
     this.possibilities.clear()
     this.recordStep(strategy, "Set Value", [v], triggers)
@@ -193,5 +201,11 @@ export default class GridCell {
     }
 
     return !values.some(val => !this.possibilities.has(val))
+  }
+
+  isValid = (): boolean => {
+    return ![this.row, this.col, this.box].some(area => {
+      return area.cells.some(cell => cell !== this && cell.value === this.value)
+    })
   }
 }

@@ -61,7 +61,7 @@ export default class Grid {
   unsolved: Set<number>
   history: string[]
 
-  constructor(givens: Givens) {
+  constructor(givens: Givens, checking: boolean = false) {
     this.cells = []
     this.rows = new GridAreaGroup("row")
     this.cols = new GridAreaGroup("col")
@@ -70,7 +70,7 @@ export default class Grid {
     this.history = []
 
     for (let i = 0; i < 81; i++) {
-      new GridCell(i, this)
+      new GridCell(i, this, checking)
     }
 
     givens.forEach(({ index, value }) => {
@@ -94,19 +94,24 @@ export default class Grid {
     this.history.push(JSON.stringify(initialState))
   }
 
+  getUnsolved = () => {
+    return Array.from(this.unsolved)
+  }
+
   removeSolved = (solved: number[]) => {
     solved.forEach(cellIndex => {
       this.unsolved.delete(cellIndex)
     })
   }
 
-  solve = () => {
-    // Search by cell
+  solve = (): boolean => {
     this.cells.forEach(cell => cell.updateLinked())
 
     if (this.unsolved.size) {
       this.advancedSolve()
     }
+
+    return this.unsolved.size === 0
   }
 
   advancedSolve = () => {
