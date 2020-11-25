@@ -14,14 +14,14 @@
     "cms": "npx netlify-cms-proxy-server"
   },
   "dependencies": {
-    "@babel/preset-typescript": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.7",
     "dotenv": "^8.2.0",
-    "gatsby": "^2.26.1",
-    "gatsby-plugin-netlify-cms": "^4.4.0",
-    "gatsby-plugin-typescript": "^2.6.0",
-    "gatsby-source-filesystem": "^2.5.0",
-    "gatsby-transformer-json": "^2.5.0",
-    "is-hotkey": "^0.1.6",
+    "gatsby": "^2.27.1",
+    "gatsby-plugin-netlify-cms": "^4.5.0",
+    "gatsby-plugin-typescript": "^2.7.0",
+    "gatsby-source-filesystem": "^2.6.1",
+    "gatsby-transformer-json": "^2.6.0",
+    "is-hotkey": "^0.1.7",
     "is-valid-json": "^1.0.2",
     "json-to-pretty-yaml": "^1.2.2",
     "netlify-cms-app": "^2.13.3",
@@ -30,16 +30,16 @@
   },
   "devDependencies": {
     "@types/is-hotkey": "^0.1.2",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "babel-preset-gatsby-package": "^0.6.0",
-    "eslint": "^7.13.0",
+    "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-react": "^7.21.5",
-    "gatsby-plugin-sass": "^2.5.1",
+    "gatsby-plugin-sass": "^2.6.0",
     "prettier": "2.1.2",
     "sass": "^1.29.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.1.2"
   },
   "repository": {
     "type": "git",
