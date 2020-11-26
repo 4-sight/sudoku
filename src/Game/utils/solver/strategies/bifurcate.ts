@@ -1,4 +1,3 @@
-import { Givens } from "../../../types"
 import Grid from "../Classes/Grid"
 // import Worker from "workerize-loader!../workers/bifurcate.worker.ts"
 
@@ -22,6 +21,9 @@ export const bifurcate = (grid: Grid): Grid | null => {
   least.getPossibilities().some(val => {
     try {
       // Create cloned grid
+      console.log(
+        `Next Move: cell: r${least.row.index}c${least.col.index} val: ${val}`
+      )
       const newGrid = new Grid([], {
         checking: true,
         clone: grid,
@@ -34,7 +36,9 @@ export const bifurcate = (grid: Grid): Grid | null => {
         return true
       } else {
         // If unsolved recurse
-        return !!bifurcate(newGrid)
+        const nextBranch = bifurcate(newGrid)
+        solution = nextBranch
+        return !!nextBranch
       }
     } catch {
       // On invalid value
