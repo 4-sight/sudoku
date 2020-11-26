@@ -7,9 +7,9 @@ import {
   useGameActions,
   useGameState,
 } from "../context/GameStateContext"
-import { SudokuProps } from "../types"
 
 import "../scss/index.scss"
+import { SudokuProps } from "../types"
 
 const Game = () => {
   const {
@@ -17,6 +17,7 @@ const Game = () => {
     checkCells,
     clearErrors,
     clearMessage,
+    playFromHere,
   } = useGameActions()
   const { message, isSolved, solution } = useGameState()
   const [showSolution, setShowSolution] = useState<boolean>(false)
@@ -77,6 +78,14 @@ const Game = () => {
               </button>
               <button onClick={nextStep}>Next Step</button>
               <button onClick={prevStep}>PrevStep</button>
+              <button
+                onClick={() => {
+                  setWalkThrough(false)
+                  playFromHere(solution![solutionStepIndex].cells)
+                }}
+              >
+                Play from here
+              </button>
             </>
           ) : (
             <>

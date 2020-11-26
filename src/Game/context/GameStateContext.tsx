@@ -8,7 +8,7 @@ import React, {
 import { copyCell, hotKeys, checker, solver } from "../utils"
 import { CellData, SudokuProps } from "../types"
 import { useHistory, useSelection, useTimer } from "../hooks"
-import { Solution } from "../utils/solver/Classes/Grid"
+import { CellState, GridState, Solution } from "../utils/solver/Classes/Grid"
 
 interface Props extends SudokuProps {
   children: JSX.Element
@@ -40,6 +40,7 @@ interface Actions {
   stopTimer: () => void
   pauseTimer: () => void
   resetTimer: () => void
+  playFromHere: (cells: CellState[]) => void
 }
 
 const defaultState: GameState = {
@@ -66,6 +67,7 @@ const defaultActions: Actions = {
   stopTimer: () => {},
   pauseTimer: () => {},
   resetTimer: () => {},
+  playFromHere: () => {},
 }
 
 const GameStateContext = createContext<GameState>(defaultState)
@@ -355,6 +357,25 @@ export const GameStateProvider = ({ children, givens }: Props) => {
     }
   }, [currentCells])
 
+  const playFromHere = useCallback((cells: CellState[]) => {
+    history.reset()
+    const currState: CellData[] = cells.map(
+      ({ value, possibilities, fixed }, index) => ({
+        value,
+        fixed: fixed,
+        row: Math.floor(index / 9) + 1,
+        col: (index % 9) + 1,
+        index: index,
+        backgroundColor: "",
+        corner: new Set(),
+        center: new Set(possibilities),
+        error: false,
+        solution: null,
+      })
+    )
+    history.add(currState)
+  }, [])
+
   //==================================================
 
   return (
@@ -384,6 +405,7 @@ export const GameStateProvider = ({ children, givens }: Props) => {
           stopTimer,
           pauseTimer,
           resetTimer,
+          playFromHere,
         }}
       >
         {children}

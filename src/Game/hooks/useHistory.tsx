@@ -6,6 +6,7 @@ type HistoryActions = {
   add: (cells: CellData[]) => void
   undo: () => void
   redo: () => void
+  reset: () => void
 }
 type History = [currentData: CellData[], actions: HistoryActions]
 type HistoryReducer = (
@@ -38,6 +39,10 @@ export default (initialGrid: Givens = []): History => {
   const redo = () => {
     setOffset(Math.max(offset - 1, 0))
   }
+  const reset = () => {
+    setOffset(0)
+    push({ nextState: history[0], offset: history.length })
+  }
 
-  return [history[history.length - 1 - offset], { add, undo, redo }]
+  return [history[history.length - 1 - offset], { add, undo, redo, reset }]
 }
