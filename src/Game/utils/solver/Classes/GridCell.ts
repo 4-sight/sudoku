@@ -77,6 +77,14 @@ export default class GridCell {
     return areas
   }
 
+  copyFromCell = (cell: GridCell) => {
+    this.value = cell.value
+
+    cell.getPossibilities().forEach(n => {
+      this.possibilities.add(n)
+    })
+  }
+
   setValue = (v: number, strategy: Strategy, triggers: number[]) => {
     this.value = v
 

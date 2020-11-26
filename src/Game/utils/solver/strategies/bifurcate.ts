@@ -10,15 +10,6 @@ export interface Message {
 export const bifurcate = (grid: Grid): Grid | null => {
   let solution: Grid | null = null
 
-  // Create new givens from previous grid values
-  const givens = grid.cells.reduce((givens, { index, getValue }) => {
-    const value = getValue()
-    if (value) {
-      givens.push({ index, value })
-    }
-    return givens
-  }, [] as Givens)
-
   // Find the cell with the least possibilities
   const least = grid
     .getUnsolved()
@@ -30,8 +21,12 @@ export const bifurcate = (grid: Grid): Grid | null => {
   // Loop through each possibility
   least.getPossibilities().some(val => {
     try {
-      const nextGivens = [...givens, { index: least.index, value: val }]
-      const newGrid = new Grid(nextGivens, true)
+      // Create cloned grid
+      const newGrid = new Grid([], {
+        checking: true,
+        clone: grid,
+        nextMove: { cellIndex: least.index, value: val, strategy: "bifurcate" },
+      })
 
       if (newGrid.solve()) {
         // If solved

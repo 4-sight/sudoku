@@ -12,10 +12,7 @@ export default (givens: Givens): [GridState[], boolean] => {
   if (!solved) {
     const solution = bifurcate(grid)
     if (solution) {
-      console.log(solution.cells)
-      grid.cells = solution.cells
-      grid.unsolved.clear()
-      grid.history = [...grid.history, ...solution.history]
+      return [solution.getHistory(), true]
     }
   }
 

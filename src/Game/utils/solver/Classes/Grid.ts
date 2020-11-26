@@ -21,6 +21,7 @@ export type Strategy =
   | "y-wing"
   | "swordfish"
   | "jellyfish"
+  | "bifurcate"
 
 export type Action =
   | "Set Value"
@@ -53,6 +54,24 @@ export type GridState = {
 }
 export type Solution = GridState[]
 
+export type CloneOptions = {
+  checking?: boolean
+  givens?: Givens[]
+  bifurcate?: {
+    index: number
+    value: number
+  }
+}
+export type GridOptions = {
+  checking?: boolean
+  clone?: Grid
+  nextMove?: {
+    cellIndex: number
+    value: number
+    strategy: Strategy
+  }
+}
+
 export default class Grid {
   cells: GridCell[]
   rows: GridAreaGroup
@@ -61,7 +80,7 @@ export default class Grid {
   unsolved: Set<number>
   history: string[]
 
-  constructor(givens: Givens, checking: boolean = false) {
+  constructor(givens: Givens, options: GridOptions = {}) {
     this.cells = []
     this.rows = new GridAreaGroup("row")
     this.cols = new GridAreaGroup("col")
@@ -70,28 +89,61 @@ export default class Grid {
     this.history = []
 
     for (let i = 0; i < 81; i++) {
-      new GridCell(i, this, checking)
+      new GridCell(i, this, options.checking)
     }
 
-    givens.forEach(({ index, value }) => {
-      this.cells[index].setGiven(value)
-      this.unsolved.delete(index)
-    })
+    if (!options.clone) {
+      givens.forEach(({ index, value }) => {
+        this.cells[index].setGiven(value)
+        this.unsolved.delete(index)
+      })
 
-    // Set initial grid state in history
-    const initialState: GridState = {
-      cells: this.cells.map(cell => ({
-        value: cell.getValue(),
-        possibilities: cell.getPossibilities(),
-        fixed: !!cell.getValue(),
-      })),
-      strategy: "givens",
-      action: "Set givens",
-      actionValues: null,
-      triggers: givens.map(cell => cell.index),
-      changedCell: null,
+      // Set initial grid state in history
+      const initialState: GridState = {
+        cells: this.cells.map(cell => ({
+          value: cell.getValue(),
+          possibilities: cell.getPossibilities(),
+          fixed: !!cell.getValue(),
+        })),
+        strategy: "givens",
+        action: "Set givens",
+        actionValues: null,
+        triggers: givens.map(cell => cell.index),
+        changedCell: null,
+      }
+      this.history.push(JSON.stringify(initialState))
+    } else {
+      // Clone cells
+      const srcCells = options.clone.cells
+      this.cells.forEach((newCell, i) => {
+        newCell.copyFromCell(srcCells[i])
+      })
+
+      // Clone area positions
+      const { rows, cols, boxes } = options.clone
+
+      rows.areas.forEach((row, i) => {
+        this.rows.get(i).copyPositions(row.pos, this)
+      })
+      cols.areas.forEach((col, i) => {
+        this.cols.get(i).copyPositions(col.pos, this)
+      })
+      boxes.areas.forEach((box, i) => {
+        this.boxes.get(i).copyPositions(box.pos, this)
+      })
+
+      // Clone unsolved
+      this.unsolved = new Set(options.clone.unsolved)
+
+      // Clone history
+      this.history = [...options.clone.history]
+
+      if (options.nextMove) {
+        const { cellIndex, value, strategy } = options.nextMove
+
+        this.cells[cellIndex].setValue(value, strategy, [])
+      }
     }
-    this.history.push(JSON.stringify(initialState))
   }
 
   getUnsolved = () => {

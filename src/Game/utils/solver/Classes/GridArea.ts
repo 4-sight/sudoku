@@ -1,7 +1,7 @@
 import GridCell from "./GridCell"
 import Positions from "./Positions"
 import { hidden } from "../strategies"
-import { Strategy } from "./Grid"
+import Grid, { Strategy } from "./Grid"
 
 export type Area = "row" | "col" | "box"
 type GetNPositionsExclusions = {
@@ -263,5 +263,21 @@ export default class GridArea {
     // Pointing pairs/ box line reduction
     doubles.forEach(([positions, val]) => this.pointing(positions, val))
     triples.forEach(([positions, val]) => this.pointing(positions, val))
+  }
+
+  copyPositions = (positions: Map<number, Positions>, grid: Grid) => {
+    this.pos = new Map<number, Positions>()
+
+    // For each value
+    positions.forEach((srcPos, v) => {
+      const clonePos = new Positions()
+
+      // Map each cell to corresponding in local grid
+      srcPos.toArray().forEach(cell => {
+        clonePos.add(grid.cells[cell.index])
+      })
+
+      this.pos.set(v, clonePos)
+    })
   }
 }
