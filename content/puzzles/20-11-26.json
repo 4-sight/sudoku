@@ -1,0 +1,6 @@
+{
+  "variant": "classic",
+  "date": "20-11-26",
+  "title": "Extreme Bifurcation",
+  "givens": "[{\"index\":2,\"value\":6},{\"index\":3,\"value\":7},{\"index\":6,\"value\":4},{\"index\":16,\"value\":7},{\"index\":25,\"value\":3},{\"index\":13,\"value\":5},{\"index\":21,\"value\":1},{\"index\":19,\"value\":7},{\"index\":27,\"value\":8},{\"index\":37,\"value\":6},{\"index\":45,\"value\":7},{\"index\":54,\"value\":6},{\"index\":55,\"value\":9},{\"index\":64,\"value\":3},{\"index\":65,\"value\":7},{\"index\":74,\"value\":8},{\"index\":66,\"value\":9},{\"index\":67,\"value\":6},{\"index\":59,\"value\":7},{\"index\":61,\"value\":2},{\"index\":62,\"value\":3},{\"index\":70,\"value\":4},{\"index\":78,\"value\":9},{\"index\":79,\"value\":6},{\"index\":80,\"value\":7},{\"index\":35,\"value\":6},{\"index\":34,\"value\":1},{\"index\":42,\"value\":7},{\"index\":43,\"value\":5},{\"index\":53,\"value\":4},{\"index\":31,\"value\":7},{\"index\":32,\"value\":9},{\"index\":39,\"value\":3},{\"index\":41,\"value\":1},{\"index\":48,\"value\":6},{\"index\":49,\"value\":2}]"
+}
