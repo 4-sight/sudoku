@@ -21,9 +21,6 @@ export const bifurcate = (grid: Grid): Grid | null => {
   least.getPossibilities().some(val => {
     try {
       // Create cloned grid
-      console.log(
-        `Next Move: cell: r${least.row.index}c${least.col.index} val: ${val}`
-      )
       const newGrid = new Grid([], {
         checking: true,
         clone: grid,
